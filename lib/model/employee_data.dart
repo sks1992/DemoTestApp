@@ -409,5 +409,3 @@ _getTransportDataWidgets(TransportModel transportModel) {
 }
 
  */
- */
-* */
