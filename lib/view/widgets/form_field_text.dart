@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 class FormFieldText extends StatelessWidget {
   final int maxLines;
   final String? initialValue;
+
   //final int maxLength;
   final TextInputType inputType;
   final String prefix;
@@ -18,8 +19,9 @@ class FormFieldText extends StatelessWidget {
   final bool textRequired;
   final bool requiredFieldSymbol;
   final TextInputAction? textInputAction;
+  String? employeeValue;
 
-  const FormFieldText({
+  FormFieldText({
     Key? key,
     this.initialValue,
     this.maxLines = 1,
@@ -37,6 +39,7 @@ class FormFieldText extends StatelessWidget {
     this.hint,
     this.requiredFieldSymbol = false,
     this.textInputAction,
+    this.employeeValue,
   }) : super(key: key);
 
   @override
@@ -66,6 +69,7 @@ class FormFieldText extends StatelessWidget {
               ),
         const SizedBox(height: 4),
         TextFormField(
+          onChanged: (value) => employeeValue = value,
           initialValue: initialValue,
           enabled: enabled,
           obscureText: obscureText,

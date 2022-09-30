@@ -16,11 +16,15 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
 
   final TextEditingController conformPasswordController =
       TextEditingController();
   bool isLogin = true;
   bool isLoading = false;
+  bool isPhoneLogin = false;
+  String verificationIdForOtp = "";
 
   @override
   void dispose() {
@@ -28,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
     emailController.dispose();
     passwordController.dispose();
     conformPasswordController.dispose();
+    phoneController.dispose();
+    otpController.dispose();
   }
 
   //function for creating an account
@@ -83,8 +89,54 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       } on FirebaseAuthException catch (e) {
+        setState(() {
+          isLoading = false;
+        });
         showSnackBar(context, e.code.toString());
       }
+    }
+  }
+
+  //function for sending otp to mobile
+  void sendOTP() async {
+    String phone = "+91${phoneController.text.trim()}";
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phone,
+      codeSent: (verificationId, resendToken) {
+        setState(() {
+          isPhoneLogin = true;
+          verificationIdForOtp = verificationId;
+        });
+      },
+      verificationCompleted: (credential) {},
+      verificationFailed: (e) {
+        showSnackBar(context, e.code.toString());
+      },
+      codeAutoRetrievalTimeout: (verificationId) {},
+      timeout: const Duration(seconds: 30),
+    );
+  }
+
+  void verifyOtp() async {
+    String otp = otpController.text.trim();
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationIdForOtp, smsCode: otp);
+
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmployeeScreen(),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.code.toString());
     }
   }
 
@@ -209,6 +261,53 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   )
+                ],
+              ),
+            const Divider(thickness: 2),
+            if (isPhoneLogin == false)
+              Column(
+                children: [
+                  const Text("Sign In With Phone"),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    controller: phoneController,
+                    hintText: "Enter Phone number",
+                    textInputType: TextInputType.phone,
+                    icon: Icons.phone_android,
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      hideKeyboard();
+                      sendOTP();
+                    },
+                    child: const Text("Phone Login"),
+                  ),
+                ],
+              ),
+            if (isPhoneLogin)
+              Column(
+                children: [
+                  const Text("Enter OTP"),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      controller: otpController,
+                      maxLength: 6,
+                      decoration: const InputDecoration(
+                          labelText: "6-Digit OTP", counterText: ""),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      verifyOtp();
+                      hideKeyboard();
+                    },
+                    child: const Text("Verify"),
+                  ),
                 ],
               ),
           ],
