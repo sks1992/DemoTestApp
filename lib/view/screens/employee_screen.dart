@@ -1,6 +1,7 @@
 import 'package:demo_app/utils/firestore_methods.dart';
 import 'package:demo_app/utils/utils.dart';
 import 'package:demo_app/view/screens/login_screen.dart';
+import 'package:demo_app/view/screens/search_page.dart';
 import 'package:demo_app/view/screens/show_employee_list_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,8 +48,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     salaryController.clear();
     remarkController.clear();
     mobileNoController.clear();
-    dateOfBirth = DateTime.now();
-    dateOfJoining = DateTime.now();
   }
 
   void postEmployeeData() async {
@@ -76,7 +75,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         setState(() {
           isLoading = false;
         });
-        showSnackBar(context, message);
+        showSnackBar(context, "Data Add Success");
       }
     } catch (e) {
       setState(() {
@@ -108,133 +107,142 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              FormFieldText(
-                controller: employeeCodeController,
-                title: "Employee Code",
-                inputType: TextInputType.number,
-              ),
-              FormFieldText(
-                controller: employeeNameController,
-                title: "Employee Name",
-              ),
-              FormFieldText(
-                controller: addressController,
-                title: "Address",
-              ),
-              FormFieldText(
-                controller: mobileNoController,
-                title: "Mobile NO.",
-                inputType: TextInputType.phone,
-              ),
-              ReusableDatePicker(
-                title: "Date Of Birth",
-                onPressed: () async {
-                  DateTime? newDate = await showDatePicker(
-                    context: context,
-                    initialDate: dateOfBirth,
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-                  //if we press "CANCEL"
-                  if (newDate == null) return;
-                  //if we press "OK"
-                  setState(() {
-                    dateOfBirth = newDate;
-                    dob = getFormattedDate(newDate.toString());
-                  });
-                },
-                dateFormat: dateOfBirth,
-              ),
-              ReusableDatePicker(
-                title: "Date Of Joining",
-                onPressed: () async {
-                  DateTime? newDate = await showDatePicker(
-                    context: context,
-                    initialDate: dateOfJoining,
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-                  //if we press "CANCEL"
-                  if (newDate == null) return;
-                  //if we press "OK"
-                  setState(() {
-                    dateOfJoining = newDate;
-                    doj = getFormattedDate(newDate.toString());
-                  });
-                },
-                dateFormat: dateOfJoining,
-              ),
-              FormFieldText(
-                controller: salaryController,
-                title: "Salary",
-                inputType: TextInputType.number,
-              ),
-              FormFieldText(
-                controller: remarkController,
-                title: "Remark",
-              ),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                    onPressed: () {
-                      hideKeyboard();
-                      if (employeeNameController.text.isNotEmpty &&
-                          employeeCodeController.text.isNotEmpty &&
-                          addressController.text.isNotEmpty &&
-                          salaryController.text.isNotEmpty &&
-                          remarkController.text.isNotEmpty &&
-                          mobileNoController.text.isNotEmpty &&
-                          dob.isNotEmpty &&
-                          doj.isNotEmpty) {
-                        postEmployeeData();
-                        clearAllEmployeeData();
-                      } else {
-                        showSnackBar(context, "Please Fill All Fields");
-                      }
-                    },
-                    child: isLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.blue,
-                          )
-                        : const Text(
-                            "Save",
-                            style: TextStyle(color: Colors.black),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                FormFieldText(
+                  controller: employeeCodeController,
+                  title: "Employee Code",
+                  inputType: TextInputType.number,
+                ),
+                FormFieldText(
+                  controller: employeeNameController,
+                  title: "Employee Name",
+                ),
+                FormFieldText(
+                  controller: addressController,
+                  title: "Address",
+                ),
+                FormFieldText(
+                  controller: mobileNoController,
+                  title: "Mobile NO.",
+                  inputType: TextInputType.phone,
+                ),
+                ReusableDatePicker(
+                  title: "Date Of Birth",
+                  onPressed: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: dateOfBirth,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    //if we press "CANCEL"
+                    if (newDate == null) return;
+                    //if we press "OK"
+                    setState(() {
+                      dateOfBirth = newDate;
+                      dob = getFormattedDate(newDate.toString());
+                    });
+                  },
+                  dateFormat: dateOfBirth,
+                ),
+                ReusableDatePicker(
+                  title: "Date Of Joining",
+                  onPressed: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: dateOfJoining,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    //if we press "CANCEL"
+                    if (newDate == null) return;
+                    //if we press "OK"
+                    setState(() {
+                      dateOfJoining = newDate;
+                      doj = getFormattedDate(newDate.toString());
+                    });
+                  },
+                  dateFormat: dateOfJoining,
+                ),
+                FormFieldText(
+                  controller: salaryController,
+                  title: "Salary",
+                  inputType: TextInputType.number,
+                ),
+                FormFieldText(
+                  controller: remarkController,
+                  title: "Remark",
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white),
+                      onPressed: () {
+                        hideKeyboard();
+                        if (employeeNameController.text.isNotEmpty &&
+                            employeeCodeController.text.isNotEmpty &&
+                            addressController.text.isNotEmpty &&
+                            salaryController.text.isNotEmpty &&
+                            remarkController.text.isNotEmpty &&
+                            mobileNoController.text.isNotEmpty &&
+                            dob.isNotEmpty &&
+                            doj.isNotEmpty) {
+                          postEmployeeData();
+                          clearAllEmployeeData();
+                        } else {
+                          showSnackBar(context, "Please Fill All Fields");
+                        }
+                      },
+                      child: isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.blue,
+                            )
+                          : const Text(
+                              "Save",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchData(),
                           ),
-                  ),
-                  ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                    onPressed: () {},
-                    child: const Text(
-                      "Search",
-                      style: TextStyle(color: Colors.black),
+                        );
+                      },
+                      child: const Text(
+                        "Search",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                    onPressed: () {
-                      clearAllEmployeeData();
-                    },
-                    child: const Text(
-                      "Reset",
-                      style: TextStyle(color: Colors.black),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white),
+                      onPressed: () {
+                        clearAllEmployeeData();
+                      },
+                      child: const Text(
+                        "Reset",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const Divider(thickness: 2),
-              const ShowEmployeeListData(),
-            ],
+                  ],
+                ),
+                const Divider(thickness: 2),
+                const ShowEmployeeListData(),
+              ],
+            ),
           ),
         ),
       ),
