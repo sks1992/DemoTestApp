@@ -43,6 +43,9 @@ class _LoginPageState extends State<LoginPage> {
     String conformPassword = conformPasswordController.text.trim();
 
     if (email == "" || password == "" || conformPassword == "") {
+      setState(() {
+        isLogin = true;
+      });
       showSnackBar(context, "Please Fill All The detail");
     } else if (password != conformPassword) {
       showSnackBar(context, "Password and conform password not match");
@@ -55,10 +58,13 @@ class _LoginPageState extends State<LoginPage> {
         if (userCredential.user != null) {
           showSnackBar(context, "Register Success");
           setState(() {
-            isLogin = true;
+            isLoading = false;
           });
         }
       } on FirebaseAuthException catch (e) {
+        setState(() {
+          isLoading = false;
+        });
         showSnackBar(context, e.code.toString());
       }
     }
@@ -70,6 +76,9 @@ class _LoginPageState extends State<LoginPage> {
     String password = passwordController.text.trim();
 
     if (email == "" || password == "") {
+      setState(() {
+        isLoading = false;
+      });
       showSnackBar(context, "Please Fill All The detail");
     } else {
       try {

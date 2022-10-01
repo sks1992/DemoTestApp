@@ -45,7 +45,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-//     final mq = MediaQuery.of(context);
-//     final width = mq.size.width;
-//     final height = mq.size.height;
