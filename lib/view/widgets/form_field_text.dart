@@ -19,7 +19,7 @@ class FormFieldText extends StatelessWidget {
   final bool textRequired;
   final bool requiredFieldSymbol;
   final TextInputAction? textInputAction;
-  String? employeeValue;
+  ValueChanged<String>? dataChange;
 
   FormFieldText({
     Key? key,
@@ -39,7 +39,7 @@ class FormFieldText extends StatelessWidget {
     this.hint,
     this.requiredFieldSymbol = false,
     this.textInputAction,
-    this.employeeValue,
+    this.dataChange,
   }) : super(key: key);
 
   @override
@@ -69,7 +69,7 @@ class FormFieldText extends StatelessWidget {
               ),
         const SizedBox(height: 4),
         TextFormField(
-          onChanged: (value) => employeeValue = value,
+          onChanged: dataChange,
           initialValue: initialValue,
           enabled: enabled,
           obscureText: obscureText,

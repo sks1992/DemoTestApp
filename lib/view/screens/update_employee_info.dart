@@ -89,24 +89,22 @@ class _UpdateEmployeeInfoState extends State<UpdateEmployeeInfo> {
             child: ListView(
               children: [
                 FormFieldText(
-                  initialValue:employeeCodeController ,
-                  employeeValue: employeeCodeController,
+                  dataChange: (value) => {},
+                  initialValue: employeeCodeController,
                   title: "Employee Code",
                   inputType: TextInputType.number,
                 ),
                 FormFieldText(
+                  dataChange: (value) => {},
                   initialValue: employeeNameController,
-                  employeeValue: employeeNameController,
                   title: "Employee Name",
                 ),
                 FormFieldText(
                   initialValue: addressController,
-                  employeeValue: addressController,
                   title: "Address",
                 ),
                 FormFieldText(
                   initialValue: mobileNoController,
-                  employeeValue: mobileNoController,
                   title: "Mobile NO.",
                   inputType: TextInputType.phone,
                 ),
@@ -149,14 +147,12 @@ class _UpdateEmployeeInfoState extends State<UpdateEmployeeInfo> {
                   dateFormat: dateOfJoining,
                 ),
                 FormFieldText(
-                  initialValue:salaryController ,
-                  employeeValue: salaryController,
+                  initialValue: salaryController,
                   title: "Salary",
                   inputType: TextInputType.number,
                 ),
                 FormFieldText(
-                  initialValue:remarkController,
-                  employeeValue: remarkController,
+                  initialValue: remarkController,
                   title: "Remark",
                 ),
                 const SizedBox(height: 20.0),

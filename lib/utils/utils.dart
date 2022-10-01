@@ -1,11 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
+
+Size getScreenSize() {
+  return MediaQueryData.fromWindow(WidgetsBinding.instance!.window).size;
+}
 
 // for displaying SnackBars
 showSnackBar(BuildContext context, String text) {
-  return ScaffoldMessenger.of(context).showSnackBar(
+  ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(text),
+      backgroundColor: Colors.orange,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      content: SizedBox(
+        width: getScreenSize().width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
     ),
   );
 }
@@ -24,4 +48,8 @@ String getFormattedDate(String date) {
     return "-";
   }
   return _dateFormatMN.format(DateTime.parse(date));
+}
+
+String getUid() {
+  return (100000 + Random().nextInt(10000)).toString();
 }

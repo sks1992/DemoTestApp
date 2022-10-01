@@ -41,12 +41,12 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   }
 
   void clearAllEmployeeData() {
-    employeeCodeController.text = "";
-    employeeNameController.text = "";
-    addressController.text = "";
-    salaryController.text = "";
-    remarkController.text = "";
-    mobileNoController.text = "";
+    employeeCodeController.clear();
+    employeeNameController.clear();
+    addressController.clear();
+    salaryController.clear();
+    remarkController.clear();
+    mobileNoController.clear();
     dateOfBirth = DateTime.now();
     dateOfJoining = DateTime.now();
   }
@@ -192,7 +192,9 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                           addressController.text.isNotEmpty &&
                           salaryController.text.isNotEmpty &&
                           remarkController.text.isNotEmpty &&
-                          mobileNoController.text.isNotEmpty) {
+                          mobileNoController.text.isNotEmpty &&
+                          dob.isNotEmpty &&
+                          doj.isNotEmpty) {
                         postEmployeeData();
                         clearAllEmployeeData();
                       } else {
@@ -213,14 +215,16 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                         ElevatedButton.styleFrom(backgroundColor: Colors.white),
                     onPressed: () {},
                     child: const Text(
-                      "Delete All",
+                      "Search",
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
                   ElevatedButton(
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      clearAllEmployeeData();
+                    },
                     child: const Text(
                       "Reset",
                       style: TextStyle(color: Colors.black),

@@ -16,7 +16,7 @@ class CustomTableCell extends StatelessWidget {
             text,
             style: const TextStyle(
               fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),

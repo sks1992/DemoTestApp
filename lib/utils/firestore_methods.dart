@@ -28,7 +28,7 @@ class FirestoreMethods {
         dateOfBirth: dateOfBirth,
       );
 
-      _firestore.collection(collectionName).doc(employeeCode).set(
+      _firestore.collection(collectionName).doc(getUid()).set(
             employeeData.toJson(),
           );
       errorMessage = "Success";
