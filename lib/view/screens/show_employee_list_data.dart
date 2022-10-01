@@ -105,8 +105,8 @@ class _ShowEmployeeListDataState extends State<ShowEmployeeListData> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => UpdateEmployeeInfo(
-                                          employeeId: employeeData[i]
-                                              ['id']),
+                                        employeeId: employeeData[i]['id'],
+                                      ),
                                     ),
                                   )
                                 },
@@ -116,9 +116,8 @@ class _ShowEmployeeListDataState extends State<ShowEmployeeListData> {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () => {
-                                  deleteUser(employeeData[i]['id'])
-                                },
+                                onPressed: () =>
+                                    {deleteUser(employeeData[i]['id'])},
                                 icon: const Icon(
                                   Icons.delete,
                                   color: Colors.red,

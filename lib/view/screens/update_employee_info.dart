@@ -36,7 +36,7 @@ class _UpdateEmployeeInfoState extends State<UpdateEmployeeInfo> {
     dateOfBirth,
   ) {
     return data
-        .doc(employeeCode)
+        .doc(widget.employeeId)
         .update({
           "employeeCode": employeeCode,
           "employeeName": employeeName,
@@ -75,36 +75,38 @@ class _UpdateEmployeeInfoState extends State<UpdateEmployeeInfo> {
             );
           }
           var data = snapshot.data!.data();
-          var employeeCodeController = data!['employeeCode'];
-          var employeeNameController = data['employeeName'];
-          var addressController = data['address'];
-          var mobileNoController = data['mobileNo'];
+          var employeeCode = data!['employeeCode'];
+          var employeeName = data['employeeName'];
+          var address = data['address'];
+          var mobileNo = data['mobileNo'];
           var dob = data['dateOfBirth'];
           var doj = data['dateOfJoining'];
-          var salaryController = data['salary'];
-          var remarkController = data['remark'];
+          var salary = data['salary'];
+          var remark = data['remark'];
 
           return Padding(
             padding: const EdgeInsets.all(20.00),
             child: ListView(
               children: [
                 FormFieldText(
-                  dataChange: (value) => {},
-                  initialValue: employeeCodeController,
+                  dataChange: (value) => employeeCode=value,
+                  initialValue: employeeCode,
                   title: "Employee Code",
                   inputType: TextInputType.number,
                 ),
                 FormFieldText(
-                  dataChange: (value) => {},
-                  initialValue: employeeNameController,
+                  dataChange: (value) => employeeName=value,
+                  initialValue: employeeName,
                   title: "Employee Name",
                 ),
                 FormFieldText(
-                  initialValue: addressController,
+                  dataChange: (value) => address=value,
+                  initialValue: address,
                   title: "Address",
                 ),
                 FormFieldText(
-                  initialValue: mobileNoController,
+                  dataChange: (value) => mobileNo=value,
+                  initialValue: mobileNo,
                   title: "Mobile NO.",
                   inputType: TextInputType.phone,
                 ),
@@ -147,12 +149,14 @@ class _UpdateEmployeeInfoState extends State<UpdateEmployeeInfo> {
                   dateFormat: dateOfJoining,
                 ),
                 FormFieldText(
-                  initialValue: salaryController,
+                  dataChange: (value) => salary=value,
+                  initialValue: salary,
                   title: "Salary",
                   inputType: TextInputType.number,
                 ),
                 FormFieldText(
-                  initialValue: remarkController,
+                  dataChange: (value) => remark=value,
+                  initialValue: remark,
                   title: "Remark",
                 ),
                 const SizedBox(height: 20.0),
@@ -162,12 +166,12 @@ class _UpdateEmployeeInfoState extends State<UpdateEmployeeInfo> {
                     ElevatedButton(
                       onPressed: () {
                         updateEmployeeData(
-                          employeeCodeController,
-                          employeeNameController,
-                          addressController,
-                          salaryController,
-                          mobileNoController,
-                          remarkController,
+                          employeeCode,
+                          employeeName,
+                          address,
+                          salary,
+                          mobileNo,
+                          remark,
                           doj,
                           dob,
                         );
