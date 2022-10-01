@@ -42,10 +42,14 @@ class _ShowEmployeeListDataState extends State<ShowEmployeeListData> {
 
           final List employeeData = [];
 
+          //get data from firebase docs
           snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map a = document.data() as Map<String, dynamic>;
-            employeeData.add(a);
-            a['id'] = document.id;
+            //save data in map format
+            Map employee = document.data() as Map<String, dynamic>;
+            //add data to list
+            employeeData.add(employee);
+            //get doc id from document.id and add in employee list
+            employee['id'] = document.id;
           }).toList();
 
           return Container(
@@ -102,7 +106,7 @@ class _ShowEmployeeListDataState extends State<ShowEmployeeListData> {
                                     MaterialPageRoute(
                                       builder: (context) => UpdateEmployeeInfo(
                                           employeeId: employeeData[i]
-                                              ['employeeCode']),
+                                              ['id']),
                                     ),
                                   )
                                 },
@@ -113,7 +117,7 @@ class _ShowEmployeeListDataState extends State<ShowEmployeeListData> {
                               ),
                               IconButton(
                                 onPressed: () => {
-                                  deleteUser(employeeData[i]['employeeCode'])
+                                  deleteUser(employeeData[i]['id'])
                                 },
                                 icon: const Icon(
                                   Icons.delete,

@@ -1,3 +1,4 @@
+import 'package:demo_app/utils/utils.dart';
 import 'package:demo_app/view/screens/employee_screen.dart';
 import 'package:demo_app/view/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,23 +10,38 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: (FirebaseAuth.instance.currentUser != null)
-          ? const EmployeeScreen()
-          : const LoginPage(),
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        // CHeck for Errors
+        if (snapshot.hasError) {
+          showSnackBar(context, "Something went Wrong");
+        }
+        // once Completed, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MaterialApp(
+            title: 'Employee Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            debugShowCheckedModeBanner: false,
+            home: (FirebaseAuth.instance.currentUser != null)
+                ? const EmployeeScreen()
+                : const LoginPage(),
+          );
+        }
+        return const CircularProgressIndicator();
+      },
     );
   }
 }
