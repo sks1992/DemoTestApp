@@ -214,7 +214,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white),
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const SearchData(),
